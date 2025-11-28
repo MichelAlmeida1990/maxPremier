@@ -194,6 +194,7 @@ export default function Clients() {
         }}
         title={selectedClient ? 'Editar Cliente' : 'Novo Cliente'}
         size="md"
+        data-tour="client-form-modal"
       >
         <ClientForm
           client={selectedClient || undefined}

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride'
 import { HelpCircle } from 'lucide-react'
-import { dashboardSteps, checklistsSteps, visitsSteps, clientsSteps } from './TourSteps'
+import { completeTourSteps } from './TourSteps'
 
 interface AppTourProps {
   run?: boolean
@@ -25,50 +25,78 @@ export function resetTour(): void {
 
 export default function AppTour({ run = false, onComplete }: AppTourProps) {
   const [runTour, setRunTour] = useState(run)
+  const [stepIndex, setStepIndex] = useState(0)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     setRunTour(run)
-  }, [run])
-
-  // Selecionar os passos baseado na página atual
-  const getStepsForPage = (): Step[] => {
-    switch (location.pathname) {
-      case '/':
-        return dashboardSteps
-      case '/checklists':
-        return checklistsSteps
-      case '/visits':
-        return visitsSteps
-      case '/clients':
-        return clientsSteps
-      default:
-        return dashboardSteps
+    if (run) {
+      setStepIndex(0)
+      // Garantir que começamos na página de clientes
+      if (location.pathname !== '/clients') {
+        navigate('/clients')
+      }
     }
-  }
+  }, [run, navigate, location.pathname])
 
   const handleTourCallback = (data: CallBackProps) => {
-    const { status } = data
+    const { status, index, action } = data
+
+    // Navegar entre páginas conforme o tour avança
+    if (action === 'next') {
+      const nextStep = completeTourSteps[index + 1]
+      if (nextStep?.navigateTo) {
+        setTimeout(() => {
+          navigate(nextStep.navigateTo)
+          // Aguardar um pouco para a página carregar antes de mostrar o próximo passo
+          setTimeout(() => {
+            setStepIndex(index + 1)
+          }, 500)
+        }, 300)
+        return // Não atualizar stepIndex aqui, será atualizado após navegação
+      }
+      setStepIndex(index + 1)
+    } else if (action === 'prev') {
+      const prevStep = completeTourSteps[index - 1]
+      if (prevStep?.navigateTo) {
+        setTimeout(() => {
+          navigate(prevStep.navigateTo)
+          setTimeout(() => {
+            setStepIndex(index - 1)
+          }, 500)
+        }, 300)
+        return
+      }
+      setStepIndex(index - 1)
+    }
 
     if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
       markTourAsCompleted()
       setRunTour(false)
+      setStepIndex(0)
       if (onComplete) {
         onComplete()
       }
     }
   }
 
-  const steps = getStepsForPage()
+  const steps = completeTourSteps
 
   return (
     <Joyride
       steps={steps}
       run={runTour}
+      stepIndex={stepIndex}
       continuous
       showProgress
       showSkipButton
       callback={handleTourCallback}
+      disableScrolling={false}
+      disableOverlayClose={false}
+      floaterProps={{
+        disableAnimation: false,
+      }}
       styles={{
         options: {
           primaryColor: '#00afee', // maxpremier-blue-bright

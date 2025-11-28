@@ -7,9 +7,10 @@ interface ModalProps {
   title: string
   children: ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  'data-tour'?: string
 }
 
-export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+export default function Modal({ isOpen, onClose, title, children, size = 'md', 'data-tour': dataTour }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -49,6 +50,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
           // Permitir todos os atalhos de teclado dentro do modal
           e.stopPropagation()
         }}
+        data-tour={dataTour}
       >
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-maxpremier-blue-dark">{title}</h2>

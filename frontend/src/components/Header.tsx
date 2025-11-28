@@ -12,7 +12,7 @@ export default function Header() {
           />
           <span className="text-xl font-bold">MAXPREMIER</span>
         </Link>
-        <nav className="flex items-center space-x-6">
+        <nav className="flex items-center space-x-6" data-tour="header-nav">
           <Link to="/" className="hover:text-maxpremier-blue-bright transition-colors">
             Dashboard
           </Link>

@@ -388,6 +388,7 @@ export default function Checklists() {
         }}
         title={selectedTemplate ? 'Editar Checklist' : 'Novo Checklist'}
         size="lg"
+        data-tour="checklist-form-modal"
       >
         <ChecklistForm
           template={selectedTemplate || undefined}

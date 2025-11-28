@@ -12,17 +12,8 @@ export default function Layout({ children }: LayoutProps) {
   const [showTourButton, setShowTourButton] = useState(false)
 
   useEffect(() => {
-    // Verificar se o usuário já completou o tour
-    if (!hasCompletedTour()) {
-      // Aguardar um pouco antes de iniciar o tour automaticamente
-      const timer = setTimeout(() => {
-        setRunTour(true)
-      }, 1000)
-      return () => clearTimeout(timer)
-    } else {
-      // Se já completou, mostrar botão para reiniciar
-      setShowTourButton(true)
-    }
+    // Sempre mostrar o botão do tour (opcional)
+    setShowTourButton(true)
   }, [])
 
   const handleStartTour = () => {

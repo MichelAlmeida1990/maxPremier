@@ -363,6 +363,7 @@ export default function Visits() {
         onClose={() => setIsModalOpen(false)}
         title="Nova Visita"
         size="lg"
+        data-tour="visit-form-modal"
       >
         <VisitForm
           clients={clients}
