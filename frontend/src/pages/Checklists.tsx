@@ -172,10 +172,10 @@ export default function Checklists() {
   }
 
   return (
-    <div>
+    <div data-tour="checklists-page">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Checklists</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2">
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-checklist">
           <Plus size={20} />
           <span>Novo Checklist</span>
         </button>
