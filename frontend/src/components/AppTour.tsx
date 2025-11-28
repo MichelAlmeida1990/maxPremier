@@ -277,8 +277,9 @@ export default function AppTour({ run = false, onComplete }: AppTourProps) {
       return
     }
 
-    // Quando o usuário clica em próximo (pode vir de step:after ou diretamente)
-    if (action === 'next' && type !== 'step:after' && type !== 'step:before') {
+    // Quando o usuário clica em próximo (já tratamos step:after acima)
+    // Este bloco trata outros casos de 'next' que não sejam step:after
+    if (action === 'next') {
       console.log(`[NEXT] Avançando do passo ${index} para ${index + 1}, stepIndex atual: ${stepIndex}`)
       const nextStep = completeTourSteps[index + 1]
       
