@@ -35,7 +35,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', '
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
       // Removido onClick para não fechar ao clicar fora
       onMouseDown={(e) => {
         // Prevenir que eventos de mouse interfiram com seleção de texto
@@ -43,7 +43,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', '
       }}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto`}
+        className={`bg-white rounded-2xl shadow-2xl w-full ${sizeClasses[size]} max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-slideUp border border-gray-100`}
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
@@ -52,18 +52,18 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', '
         }}
         data-tour={dataTour}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-maxpremier-blue-dark">{title}</h2>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+          <h2 className="text-xl sm:text-2xl font-bold text-maxpremier-blue-dark pr-2">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1 transition-all duration-200 flex-shrink-0"
             aria-label="Fechar"
             type="button"
           >
             <X size={24} />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6">{children}</div>
       </div>
     </div>
   )

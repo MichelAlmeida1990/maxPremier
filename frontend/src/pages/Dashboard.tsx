@@ -94,9 +94,13 @@ export default function Dashboard() {
       // Processar visitas e contar por mês
       visits.forEach((visit) => {
         // Parse correto da data (pode vir como string ISO ou Date)
+        // Extrair apenas a parte da data para evitar problemas de timezone
         let visitDate: Date
         if (typeof visit.date === 'string') {
-          visitDate = new Date(visit.date)
+          // Extrair apenas YYYY-MM-DD para evitar conversão de timezone
+          const dateOnly = visit.date.split('T')[0]
+          const [year, month, day] = dateOnly.split('-').map(Number)
+          visitDate = new Date(year, month - 1, day)
         } else {
           visitDate = new Date(visit.date)
         }
@@ -161,7 +165,10 @@ export default function Dashboard() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR')
+    // Extrair apenas a parte da data (YYYY-MM-DD) para evitar problemas de timezone
+    const dateOnly = dateString.split('T')[0]
+    const [year, month, day] = dateOnly.split('-')
+    return `${day}/${month}/${year}`
   }
 
   if (isLoading) {
@@ -175,12 +182,12 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6" data-tour="dashboard">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Dashboard</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-maxpremier-blue-dark">Dashboard</h1>
         <button
           onClick={loadDashboardData}
           disabled={isLoading}
-          className="flex items-center space-x-2 px-4 py-2 bg-maxpremier-blue-bright text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="flex items-center space-x-2 px-4 py-2 bg-maxpremier-blue-bright text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 w-full sm:w-auto justify-center"
         >
           <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
           <span>Atualizar</span>
@@ -188,50 +195,50 @@ export default function Dashboard() {
       </div>
 
       {/* Cards de Estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="card">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="card-stat bg-gradient-to-br from-blue-50 to-white">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Visitas do Mês</h3>
-              <p className="text-3xl font-bold text-maxpremier-blue-bright">{stats.visitsThisMonth}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600 mb-2">Visitas do Mês</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-maxpremier-blue-bright">{stats.visitsThisMonth}</p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
+            <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl shadow-sm">
               <Calendar className="text-maxpremier-blue-bright" size={24} />
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card-stat bg-gradient-to-br from-green-50 to-white">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Total de Visitas</h3>
-              <p className="text-3xl font-bold text-maxpremier-blue-bright">{stats.totalVisits}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600 mb-2">Total de Visitas</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.totalVisits}</p>
             </div>
-            <div className="p-3 bg-green-100 rounded-lg">
+            <div className="p-3 bg-gradient-to-br from-green-100 to-green-50 rounded-xl shadow-sm">
               <TrendingUp className="text-green-600" size={24} />
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card-stat bg-gradient-to-br from-purple-50 to-white">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Checklists Ativos</h3>
-              <p className="text-3xl font-bold text-maxpremier-blue-bright">{stats.totalChecklists}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600 mb-2">Checklists Ativos</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.totalChecklists}</p>
             </div>
-            <div className="p-3 bg-purple-100 rounded-lg">
+            <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl shadow-sm">
               <ClipboardList className="text-purple-600" size={24} />
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card-stat bg-gradient-to-br from-yellow-50 to-white">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Clientes</h3>
-              <p className="text-3xl font-bold text-maxpremier-blue-bright">{stats.totalClients}</p>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600 mb-2">Clientes</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.totalClients}</p>
             </div>
-            <div className="p-3 bg-yellow-100 rounded-lg">
+            <div className="p-3 bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-xl shadow-sm">
               <Users className="text-yellow-600" size={24} />
             </div>
           </div>

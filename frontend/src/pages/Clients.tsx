@@ -41,9 +41,16 @@ export default function Clients() {
       const data = await clientsService.getAll()
       setClients(data)
       setFilteredClients(data)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao carregar clientes:', error)
-      alert('Erro ao carregar clientes. Tente novamente.')
+      const errorMessage = error?.response?.data?.error || error?.message || 'Erro ao carregar clientes'
+      
+      // Verificar se é erro de conexão
+      if (error?.code === 'ECONNREFUSED' || error?.message?.includes('Network Error')) {
+        alert('Erro: Backend não está rodando. Por favor, inicie o backend com "npm run dev:backend" na pasta backend.')
+      } else {
+        alert(`Erro ao carregar clientes: ${errorMessage}. Tente novamente.`)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -102,9 +109,9 @@ export default function Clients() {
 
   return (
     <div data-tour="clients-page">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Clientes</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-client">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-maxpremier-blue-dark">Clientes</h1>
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2 w-full sm:w-auto justify-center" data-tour="create-client">
           <Plus size={20} />
           <span>Novo Cliente</span>
         </button>
@@ -119,7 +126,7 @@ export default function Clients() {
             placeholder="Buscar por nome, contato ou endereço..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-maxpremier-blue-bright focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-maxpremier-blue-bright focus:border-maxpremier-blue-bright transition-all duration-200 shadow-sm hover:shadow-md"
           />
         </div>
       </div>
@@ -143,37 +150,37 @@ export default function Clients() {
             )}
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-xl">
+            <table className="w-full min-w-[640px] sm:min-w-0">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-semibold text-maxpremier-blue-dark">Nome</th>
-                  <th className="text-left py-3 px-4 font-semibold text-maxpremier-blue-dark">Contato</th>
-                  <th className="text-left py-3 px-4 font-semibold text-maxpremier-blue-dark">Endereço</th>
-                  <th className="text-right py-3 px-4 font-semibold text-maxpremier-blue-dark">Ações</th>
+                <tr className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+                  <th className="text-left py-4 px-2 sm:px-4 font-semibold text-maxpremier-blue-dark text-sm sm:text-base">Nome</th>
+                  <th className="text-left py-4 px-2 sm:px-4 font-semibold text-maxpremier-blue-dark text-sm sm:text-base hidden sm:table-cell">Contato</th>
+                  <th className="text-left py-4 px-2 sm:px-4 font-semibold text-maxpremier-blue-dark text-sm sm:text-base hidden md:table-cell">Endereço</th>
+                  <th className="text-right py-4 px-2 sm:px-4 font-semibold text-maxpremier-blue-dark text-sm sm:text-base">Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredClients.map((client) => (
                   <tr key={client.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="py-4 px-4 font-medium">{client.name}</td>
-                    <td className="py-4 px-4 text-gray-600">{client.contact || '-'}</td>
-                    <td className="py-4 px-4 text-gray-600">{client.address || '-'}</td>
-                    <td className="py-4 px-4">
-                      <div className="flex justify-end space-x-2">
+                    <td className="py-3 sm:py-4 px-2 sm:px-4 font-medium text-sm sm:text-base">{client.name}</td>
+                    <td className="py-3 sm:py-4 px-2 sm:px-4 text-gray-600 text-sm sm:text-base hidden sm:table-cell">{client.contact || '-'}</td>
+                    <td className="py-3 sm:py-4 px-2 sm:px-4 text-gray-600 text-sm sm:text-base hidden md:table-cell">{client.address || '-'}</td>
+                    <td className="py-3 sm:py-4 px-2 sm:px-4">
+                      <div className="flex justify-end space-x-1 sm:space-x-2">
                         <button
                           onClick={() => handleEdit(client)}
-                          className="p-2 text-maxpremier-blue-bright hover:bg-blue-50 rounded-lg transition-colors"
+                          className="p-1.5 sm:p-2 text-maxpremier-blue-bright hover:bg-blue-50 rounded-lg transition-colors"
                           title="Editar"
                         >
-                          <Edit size={18} />
+                          <Edit size={16} className="sm:w-[18px] sm:h-[18px]" />
                         </button>
                         <button
                           onClick={() => handleDelete(client)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-1.5 sm:p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           title="Deletar"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
                         </button>
                       </div>
                     </td>

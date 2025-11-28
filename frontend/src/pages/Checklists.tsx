@@ -43,9 +43,20 @@ export default function Checklists() {
       const data = await checklistsService.getAll()
       setChecklists(data)
       setFilteredChecklists(data)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao carregar checklists:', error)
-      alert('Erro ao carregar checklists. Tente novamente.')
+      const errorMessage = error?.response?.data?.error || error?.message || 'Erro ao carregar checklists'
+      
+      // Verificar se é erro de conexão
+      if (error?.code === 'ECONNREFUSED' || error?.message?.includes('Network Error')) {
+        alert('Erro: Backend não está rodando. Por favor, inicie o backend com "npm run dev:backend" na pasta backend.')
+      } else {
+        alert(`Erro ao carregar checklists: ${errorMessage}. Tente novamente.`)
+      }
+      
+      // Garantir que o loading seja desativado mesmo em caso de erro
+      setChecklists([])
+      setFilteredChecklists([])
     } finally {
       setIsLoading(false)
     }
@@ -173,9 +184,9 @@ export default function Checklists() {
 
   return (
     <div data-tour="checklists-page">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Checklists</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-checklist">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-maxpremier-blue-dark">Checklists</h1>
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2 w-full sm:w-auto justify-center" data-tour="create-checklist">
           <Plus size={20} />
           <span>Novo Checklist</span>
         </button>

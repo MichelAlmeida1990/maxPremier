@@ -7,7 +7,8 @@ import { usersService } from '../services/users'
 import { CreateVisitData } from '../services/visits'
 import Modal from '../components/Modal'
 import VisitForm from '../components/VisitForm'
-import { Search, Plus, Loader2, Calendar, Eye, Trash2, Filter } from 'lucide-react'
+import { Search, Plus, Loader2, Calendar, Eye, Trash2, Filter, Download } from 'lucide-react'
+import { generateVisitChecklistPDF } from '../utils/pdfGenerator'
 
 export default function Visits() {
   const [visits, setVisits] = useState<Visit[]>([])
@@ -65,10 +66,10 @@ export default function Visits() {
 
     // Filtro por mês e ano
     filtered = filtered.filter((visit) => {
-      const visitDate = new Date(visit.date)
-      return (
-        visitDate.getMonth() + 1 === filterMonth && visitDate.getFullYear() === filterYear
-      )
+      // Extrair apenas a parte da data para evitar problemas de timezone
+      const dateOnly = typeof visit.date === 'string' ? visit.date.split('T')[0] : visit.date.toISOString().split('T')[0]
+      const [year, month] = dateOnly.split('-').map(Number)
+      return month === filterMonth && year === filterYear
     })
 
     // Filtro por cliente
@@ -148,7 +149,10 @@ export default function Visits() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR')
+    // Extrair apenas a parte da data (YYYY-MM-DD) para evitar problemas de timezone
+    const dateOnly = dateString.split('T')[0]
+    const [year, month, day] = dateOnly.split('-')
+    return `${day}/${month}/${year}`
   }
 
   const getChecklistData = (visit: Visit): Record<string, string> => {
@@ -161,9 +165,9 @@ export default function Visits() {
 
   return (
     <div data-tour="visits-page">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Visitas</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-visit">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-maxpremier-blue-dark">Visitas</h1>
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2 w-full sm:w-auto justify-center" data-tour="create-visit">
           <Plus size={20} />
           <span>Nova Visita</span>
         </button>
@@ -341,6 +345,43 @@ export default function Visits() {
                           <Eye size={18} />
                         </button>
                         <button
+                          onClick={async () => {
+                            try {
+                              const checklistData = getChecklistData(visit)
+                              const locations = visit.template?.locations 
+                                ? JSON.parse(visit.template.locations)
+                                : Object.keys(checklistData)
+                              
+                              const locationsWithValues = locations.map((loc: string) => ({
+                                name: loc,
+                                value: checklistData[loc] || ''
+                              }))
+
+                              const dateOnly = visit.date.split('T')[0]
+                              const [year, month, day] = dateOnly.split('-')
+                              const formattedDate = `${day}/${month}/${year}`
+
+                              await generateVisitChecklistPDF({
+                                clientName: visit.client?.name || 'N/A',
+                                supervisorName: visit.nomeSupervisorManual || visit.supervisor?.name || 'N/A',
+                                date: formattedDate,
+                                checklistName: visit.template?.name || 'Checklist',
+                                locations: locationsWithValues,
+                                turno: visit.turno,
+                                nomeColaborador: visit.nomeColaborador,
+                                setor: visit.setor,
+                              })
+                            } catch (error) {
+                              console.error('Erro ao gerar PDF:', error)
+                              alert('Erro ao gerar PDF. Tente novamente.')
+                            }
+                          }}
+                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          title="Exportar PDF"
+                        >
+                          <Download size={18} />
+                        </button>
+                        <button
                           onClick={() => handleDelete(visit)}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           title="Deletar"
@@ -448,7 +489,46 @@ export default function Visits() {
             )}
 
             <div className="border-t border-gray-200 pt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status da Visita</label>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                <label className="block text-sm font-medium text-gray-700">Status da Visita</label>
+                <button
+                  onClick={async () => {
+                    try {
+                      const checklistData = getChecklistData(selectedVisit)
+                      const locations = selectedVisit.template?.locations 
+                        ? JSON.parse(selectedVisit.template.locations)
+                        : Object.keys(checklistData)
+                      
+                      const locationsWithValues = locations.map((loc: string) => ({
+                        name: loc,
+                        value: checklistData[loc] || ''
+                      }))
+
+                      const dateOnly = selectedVisit.date.split('T')[0]
+                      const [year, month, day] = dateOnly.split('-')
+                      const formattedDate = `${day}/${month}/${year}`
+
+                      await generateVisitChecklistPDF({
+                        clientName: selectedVisit.client?.name || 'N/A',
+                        supervisorName: selectedVisit.nomeSupervisorManual || selectedVisit.supervisor?.name || 'N/A',
+                        date: formattedDate,
+                        checklistName: selectedVisit.template?.name || 'Checklist',
+                        locations: locationsWithValues,
+                        turno: selectedVisit.turno,
+                        nomeColaborador: selectedVisit.nomeColaborador,
+                        setor: selectedVisit.setor,
+                      })
+                    } catch (error) {
+                      console.error('Erro ao gerar PDF:', error)
+                      alert('Erro ao gerar PDF. Tente novamente.')
+                    }
+                  }}
+                  className="btn-secondary flex items-center space-x-2 w-full sm:w-auto"
+                >
+                  <Download size={18} />
+                  <span>Exportar Checklist em PDF</span>
+                </button>
+              </div>
               <div className="flex items-center space-x-4">
                 <select
                   value={selectedVisit.status}

@@ -226,6 +226,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'center',
+    disableBeacon: true,
   },
 ]
 

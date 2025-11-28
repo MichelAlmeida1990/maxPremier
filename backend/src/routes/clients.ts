@@ -10,8 +10,12 @@ router.get('/', async (req, res) => {
       orderBy: { createdAt: 'desc' },
     })
     res.json(clients)
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar clientes' })
+  } catch (error: any) {
+    console.error('Erro ao buscar clientes:', error)
+    res.status(500).json({ 
+      error: 'Erro ao buscar clientes',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    })
   }
 })
 
