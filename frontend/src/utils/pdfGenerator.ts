@@ -20,16 +20,16 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
 
   const pageWidth = doc.internal.pageSize.getWidth()
   const margin = 20
-  const contentWidth = pageWidth - 2 * margin
+  // const contentWidth = pageWidth - 2 * margin
   let yPosition = margin
 
   // Cores MAXPREMIER
   const blueDark = [3, 31, 95] // #031f5f
   const blueBright = [0, 175, 238] // #00afee
-  const yellowGreen = [204, 255, 0] // #ccff00
+  // const yellowGreen = [204, 255, 0] // #ccff00
 
   // Header com logo (simulado com texto)
-  doc.setFillColor(...blueDark)
+  doc.setFillColor(blueDark[0], blueDark[1], blueDark[2])
   doc.rect(0, 0, pageWidth, 40, 'F')
   
   doc.setTextColor(255, 255, 255)
@@ -44,7 +44,7 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
   yPosition = 50
 
   // Título do Checklist
-  doc.setTextColor(...blueDark)
+  doc.setTextColor(blueDark[0], blueDark[1], blueDark[2])
   doc.setFontSize(18)
   doc.setFont('helvetica', 'bold')
   doc.text('CHECKLIST DE INSPEÇÃO', margin, yPosition)
@@ -62,7 +62,7 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
   yPosition += 8
 
   // Linha divisória
-  doc.setDrawColor(...blueBright)
+  doc.setDrawColor(blueBright[0], blueBright[1], blueBright[2])
   doc.setLineWidth(0.5)
   doc.line(margin, yPosition, pageWidth - margin, yPosition)
   yPosition += 8
@@ -129,7 +129,7 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
   yPosition += 8
 
   // Linha divisória
-  doc.setDrawColor(...blueBright)
+  doc.setDrawColor(blueBright[0], blueBright[1], blueBright[2])
   doc.line(margin, yPosition, pageWidth - margin, yPosition)
   yPosition += 8
 
@@ -179,7 +179,7 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
     yPosition += 10
   }
 
-  doc.setDrawColor(...blueBright)
+  doc.setDrawColor(blueBright[0], blueBright[1], blueBright[2])
   doc.line(margin, yPosition, pageWidth - margin, yPosition)
   yPosition += 8
 
@@ -203,7 +203,7 @@ export async function generateChecklistPDF(data: ChecklistPDFData): Promise<void
     yPosition = margin
   }
 
-  doc.setDrawColor(...blueBright)
+  doc.setDrawColor(blueBright[0], blueBright[1], blueBright[2])
   doc.line(margin, yPosition, pageWidth - margin, yPosition)
   yPosition += 10
 
