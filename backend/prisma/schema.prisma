@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      String   @default("supervisor") // supervisor, admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  visits    Visit[]
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  visits    Visit[]
+}
+
+model ChecklistTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  locations   String   // JSON array de locais
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  visits      Visit[]
+}
+
+model Visit {
+  id              String   @id @default(uuid())
+  clientId        String
+  supervisorId    String
+  templateId      String?
+  date            DateTime
+  checklistData   String   // JSON com dados do checklist preenchido
+  clientSignature String?  // Base64 da assinatura ou caminho do arquivo
+  status          String   @default("pending") // pending, completed, signed
+  notes           String?
+  
+  // Campos adicionais para controle operacional
+  turno           String?  // Manhã, Tarde, Noite, Madrugada
+  nomeColaborador String?  // Nome do colaborador que realizou a inspeção
+  setor           String?  // Ronda, Limpeza, Portaria, Zeladoria, etc.
+  nomeSupervisorManual String?  // Nome do supervisor quando preenchido manualmente
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  client          Client            @relation(fields: [clientId], references: [id])
+  supervisor      User              @relation(fields: [supervisorId], references: [id])
+  template        ChecklistTemplate? @relation(fields: [templateId], references: [id])
+  
+  @@index([clientId])
+  @@index([supervisorId])
+  @@index([date])
+  @@index([setor])
+  @@index([turno])
+}
+
