@@ -47,58 +47,95 @@ export default function AppTour({ run = false, onComplete }: AppTourProps) {
     }
   }, [run, navigate, location.pathname])
 
-  // Função para verificar se um elemento existe
+  // Função para verificar se um elemento existe e está visível
   const checkElementExists = (selector: string): boolean => {
     if (selector === 'body') return true
     try {
       const element = document.querySelector(selector)
-      return element !== null
+      if (!element) return false
+      // Verificar se o elemento está visível
+      const style = window.getComputedStyle(element)
+      return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
     } catch {
       return false
     }
   }
 
-  const handleTourCallback = (data: CallBackProps) => {
+  // Aguardar elemento aparecer
+  const waitForElement = (selector: string, timeout = 3000): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (checkElementExists(selector)) {
+        resolve(true)
+        return
+      }
+
+      const observer = new MutationObserver(() => {
+        if (checkElementExists(selector)) {
+          observer.disconnect()
+          resolve(true)
+        }
+      })
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      })
+
+      setTimeout(() => {
+        observer.disconnect()
+        resolve(checkElementExists(selector))
+      }, timeout)
+    })
+  }
+
+  const handleTourCallback = async (data: CallBackProps) => {
     const { status, index, action } = data
 
     // Navegar entre páginas conforme o tour avança
     if (action === 'next') {
       const nextStep = completeTourSteps[index + 1]
-      if (nextStep?.navigateTo && nextStep.navigateTo !== location.pathname) {
+      if (!nextStep) {
+        return
+      }
+
+      // Se precisa navegar para outra página
+      if (nextStep.navigateTo && nextStep.navigateTo !== location.pathname) {
         setIsNavigating(true)
         navigate(nextStep.navigateTo)
-        // Aguardar a navegação e verificar se o elemento existe
-        const checkAndAdvance = () => {
+        
+        // Aguardar a navegação e o elemento aparecer
+        if (nextStep.target && nextStep.target !== 'body') {
+          const exists = await waitForElement(nextStep.target as string, 2000)
+          if (exists) {
+            setIsNavigating(false)
+            setTimeout(() => setStepIndex(index + 1), 300)
+          } else {
+            // Elemento não encontrado, avançar mesmo assim
+            setIsNavigating(false)
+            setStepIndex(index + 1)
+          }
+        } else {
+          // Elemento é body ou não especificado
           setTimeout(() => {
-            if (nextStep.target && checkElementExists(nextStep.target as string)) {
-              setIsNavigating(false)
-              setStepIndex(index + 1)
-            } else if (nextStep.target === 'body') {
-              setIsNavigating(false)
-              setStepIndex(index + 1)
-            } else {
-              // Tentar novamente após mais um delay
-              setTimeout(checkAndAdvance, 300)
-            }
+            setIsNavigating(false)
+            setStepIndex(index + 1)
           }, 600)
         }
-        checkAndAdvance()
       } else {
-        // Verificar se o elemento existe antes de avançar
-        const currentStep = completeTourSteps[index + 1]
-        if (currentStep?.target && checkElementExists(currentStep.target as string)) {
-          setStepIndex(index + 1)
-        } else if (!currentStep?.target || currentStep.target === 'body') {
-          setStepIndex(index + 1)
-        } else {
-          // Aguardar um pouco e tentar novamente
-          setTimeout(() => {
-            if (currentStep?.target && checkElementExists(currentStep.target as string)) {
+        // Mesma página, verificar se elemento existe
+        if (nextStep.target && nextStep.target !== 'body') {
+          const exists = await waitForElement(nextStep.target as string, 1000)
+          if (exists) {
+            setStepIndex(index + 1)
+          } else {
+            // Aguardar um pouco mais
+            setTimeout(async () => {
+              const stillExists = await waitForElement(nextStep.target as string, 500)
               setStepIndex(index + 1)
-            } else {
-              setStepIndex(index + 1) // Avançar mesmo assim
-            }
-          }, 500)
+            }, 500)
+          }
+        } else {
+          setStepIndex(index + 1)
         }
       }
     } else if (action === 'prev') {
