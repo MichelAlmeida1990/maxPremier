@@ -104,7 +104,7 @@ export default function Clients() {
     <div data-tour="clients-page">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Clientes</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2">
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-client">
           <Plus size={20} />
           <span>Novo Cliente</span>
         </button>
