@@ -12,7 +12,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <aside className="w-64 bg-white shadow-md min-h-[calc(100vh-80px)]">
+    <aside className="w-64 bg-white shadow-md min-h-[calc(100vh-80px)]" data-tour="sidebar">
       <nav className="p-4">
         <ul className="space-y-2">
           {menuItems.map((item) => {

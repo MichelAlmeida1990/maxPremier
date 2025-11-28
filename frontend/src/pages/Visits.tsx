@@ -160,17 +160,17 @@ export default function Visits() {
   }
 
   return (
-    <div>
+    <div data-tour="visits-page">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Visitas</h1>
-        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2">
+        <button onClick={handleCreate} className="btn-primary flex items-center space-x-2" data-tour="create-visit">
           <Plus size={20} />
           <span>Nova Visita</span>
         </button>
       </div>
 
       {/* Filtros */}
-      <div className="card mb-6">
+      <div className="card mb-6" data-tour="visit-filters">
         <div className="flex items-center space-x-2 mb-4">
           <Filter size={20} className="text-gray-500" />
           <h3 className="font-semibold text-gray-700">Filtros</h3>

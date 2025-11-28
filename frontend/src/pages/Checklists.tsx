@@ -216,11 +216,12 @@ export default function Checklists() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredChecklists.map((checklist) => (
+            {filteredChecklists.map((checklist, index) => (
               <div
                 key={checklist.id}
                 className="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow bg-white cursor-pointer"
                 onClick={() => handleView(checklist)}
+                data-tour={index === 0 ? "checklist-card" : undefined}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">

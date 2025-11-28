@@ -174,7 +174,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-tour="dashboard">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-maxpremier-blue-dark">Dashboard</h1>
         <button
@@ -242,7 +242,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Gráfico de Visitas Mensais */}
         {monthlyData.length > 0 && (
-          <div className="card">
+          <div className="card" data-tour="charts">
             <h2 className="text-xl font-semibold text-maxpremier-blue-dark mb-4">
               Visitas por Mês (Últimos 6 meses)
             </h2>
