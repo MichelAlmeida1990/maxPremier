@@ -67,7 +67,7 @@ export default function Visits() {
     // Filtro por mês e ano
     filtered = filtered.filter((visit) => {
       // Extrair apenas a parte da data para evitar problemas de timezone
-      const dateOnly = typeof visit.date === 'string' ? visit.date.split('T')[0] : visit.date.toISOString().split('T')[0]
+      const dateOnly = visit.date.split('T')[0]
       const [year, month] = dateOnly.split('-').map(Number)
       return month === filterMonth && year === filterYear
     })

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride'
+import Joyride, { CallBackProps, STATUS } from 'react-joyride'
 import { HelpCircle } from 'lucide-react'
 import { completeTourSteps } from './TourSteps'
 import { markTourAsCompleted } from '../utils/tourUtils'
@@ -278,7 +278,7 @@ export default function AppTour({ run = false, onComplete }: AppTourProps) {
     }
 
     // Quando o usuário clica em próximo (pode vir de step:after ou diretamente)
-    if (action === 'next' && type !== 'step:after') {
+    if (action === 'next' && type !== 'step:after' && type !== 'step:before') {
       console.log(`[NEXT] Avançando do passo ${index} para ${index + 1}, stepIndex atual: ${stepIndex}`)
       const nextStep = completeTourSteps[index + 1]
       
