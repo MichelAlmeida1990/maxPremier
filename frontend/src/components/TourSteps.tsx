@@ -28,6 +28,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
      ),
      placement: 'bottom',
      disableBeacon: true,
+     disableOverlayClose: true,
    },
   {
     target: '[data-tour="create-client"]',
