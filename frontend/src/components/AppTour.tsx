@@ -389,7 +389,7 @@ export default function AppTour({ run = false, onComplete }: AppTourProps) {
     }
 
     // Quando o tour termina ou é pulado
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
       console.log('Tour finalizado')
       markTourAsCompleted()
       setRunTour(false)
