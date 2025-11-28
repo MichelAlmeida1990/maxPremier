@@ -27,7 +27,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'bottom',
-    navigateTo: '/clients',
+    disableBeacon: true,
   },
   {
     target: '[data-tour="create-client"]',
@@ -45,7 +45,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     content: (
       <div>
         <h3 className="font-bold text-lg mb-2">Formulário de Cliente</h3>
-        <p>Preencha os dados do cliente:</p>
+        <p>Quando você clicar em "Novo Cliente", este formulário aparecerá. Preencha os dados:</p>
         <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
           <li><strong>Nome:</strong> Obrigatório</li>
           <li><strong>Contato:</strong> Telefone ou email (opcional)</li>
@@ -55,6 +55,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'left',
+    disableBeacon: true,
   },
   
   // ========== PÁGINA DE CHECKLISTS ==========
@@ -63,7 +64,8 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     content: (
       <div>
         <h3 className="font-bold text-lg mb-2">Passo 2: Criar Checklist 📋</h3>
-        <p>Agora vamos criar um template de checklist. Clique em "Checklists" no menu lateral.</p>
+        <p>Agora vamos criar um template de checklist. Use o menu lateral para navegar.</p>
+        <p className="text-sm text-gray-600 mt-2">O tour vai te levar automaticamente para a página de Checklists.</p>
       </div>
     ),
     placement: 'right',
@@ -95,7 +97,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     content: (
       <div>
         <h3 className="font-bold text-lg mb-2">Formulário de Checklist</h3>
-        <p>Preencha os dados do checklist:</p>
+        <p>Quando você clicar em "Novo Checklist", este formulário aparecerá. Preencha os dados:</p>
         <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
           <li><strong>Nome:</strong> Ex: "Inspeção Diária"</li>
           <li><strong>Descrição:</strong> Explique o propósito (opcional)</li>
@@ -105,6 +107,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'left',
+    disableBeacon: true,
   },
   
   // ========== PÁGINA DE VISITAS ==========
@@ -147,7 +150,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     content: (
       <div>
         <h3 className="font-bold text-lg mb-2">Formulário de Visita</h3>
-        <p>Preencha os dados da visita:</p>
+        <p>Quando você clicar em "Nova Visita", este formulário aparecerá. Preencha os dados:</p>
         <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
           <li><strong>Cliente:</strong> Selecione o cliente cadastrado</li>
           <li><strong>Supervisor:</strong> Escolha da lista ou preencha manualmente</li>
@@ -160,6 +163,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'left',
+    disableBeacon: true,
   },
   
   // ========== DASHBOARD ==========
