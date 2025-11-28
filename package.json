@@ -15,7 +15,7 @@
     "prisma:generate": "cd backend && npm run prisma:generate",
     "prisma:migrate": "cd backend && npm run prisma:migrate",
     "build:backend": "cd backend && npm install && npm run prisma:generate && npm run build",
-    "start:backend": "cd backend && npm run prisma:migrate deploy && npm start"
+    "start:backend": "cd backend && npx prisma migrate deploy && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

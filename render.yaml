@@ -3,7 +3,7 @@ services:
     name: maxpremier-backend
     env: node
     buildCommand: npm install && npm run build:backend
-    startCommand: npm run start:backend
+    startCommand: cd backend && npx prisma migrate deploy && npm start
     envVars:
       - key: DATABASE_URL
         sync: false
