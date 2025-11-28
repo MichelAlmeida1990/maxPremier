@@ -17,18 +17,18 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     disableBeacon: true,
   },
   
-  // ========== PÁGINA DE CLIENTES ==========
-  {
-    target: '[data-tour="clients-page"]',
-    content: (
-      <div>
-        <h3 className="font-bold text-lg mb-2">Passo 1: Cadastrar Cliente 👥</h3>
-        <p>Primeiro, vamos cadastrar um cliente. Esta é a página de gerenciamento de clientes.</p>
-      </div>
-    ),
-    placement: 'bottom',
-    disableBeacon: true,
-  },
+   // ========== PÁGINA DE CLIENTES ==========
+   {
+     target: '[data-tour="clients-page"]',
+     content: (
+       <div>
+         <h3 className="font-bold text-lg mb-2">Passo 1: Cadastrar Cliente 👥</h3>
+         <p>Primeiro, vamos cadastrar um cliente. Esta é a página de gerenciamento de clientes.</p>
+       </div>
+     ),
+     placement: 'bottom',
+     disableBeacon: true,
+   },
   {
     target: '[data-tour="create-client"]',
     content: (
@@ -40,6 +40,22 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     ),
     placement: 'bottom',
   },
+  {
+    target: '[data-tour="client-form-modal"]',
+    content: (
+      <div>
+        <h3 className="font-bold text-lg mb-2">Formulário de Cliente</h3>
+        <p>Preencha os dados do cliente:</p>
+        <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
+          <li><strong>Nome:</strong> Obrigatório</li>
+          <li><strong>Contato:</strong> Telefone ou email (opcional)</li>
+          <li><strong>Endereço:</strong> Endereço completo (opcional)</li>
+        </ul>
+        <p className="text-sm text-gray-600 mt-2">💡 Dica: Após criar o cliente, você poderá usá-lo ao registrar visitas.</p>
+      </div>
+    ),
+    placement: 'left',
+  },
   
   // ========== PÁGINA DE CHECKLISTS ==========
   {
@@ -47,8 +63,7 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     content: (
       <div>
         <h3 className="font-bold text-lg mb-2">Passo 2: Criar Checklist 📋</h3>
-        <p>Agora vamos criar um template de checklist. Use o menu lateral para navegar.</p>
-        <p className="text-sm text-gray-600 mt-2">O tour vai te levar automaticamente para a página de Checklists.</p>
+        <p>Agora vamos criar um template de checklist. Clique em "Checklists" no menu lateral.</p>
       </div>
     ),
     placement: 'right',
@@ -74,6 +89,22 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
       </div>
     ),
     placement: 'bottom',
+  },
+  {
+    target: '[data-tour="checklist-form-modal"]',
+    content: (
+      <div>
+        <h3 className="font-bold text-lg mb-2">Formulário de Checklist</h3>
+        <p>Preencha os dados do checklist:</p>
+        <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
+          <li><strong>Nome:</strong> Ex: "Inspeção Diária"</li>
+          <li><strong>Descrição:</strong> Explique o propósito (opcional)</li>
+          <li><strong>Locais de Inspeção:</strong> Adicione os locais que serão vistoriados</li>
+        </ul>
+        <p className="text-sm text-gray-600 mt-2">💡 Dica: Use o dropdown para adicionar locais pré-definidos ou crie locais personalizados.</p>
+      </div>
+    ),
+    placement: 'left',
   },
   
   // ========== PÁGINA DE VISITAS ==========
@@ -112,22 +143,23 @@ export const completeTourSteps: (Step & { navigateTo?: string })[] = [
     placement: 'bottom',
   },
   {
-    target: '[data-tour="create-visit"]',
+    target: '[data-tour="visit-form-modal"]',
     content: (
       <div>
-        <h3 className="font-bold text-lg mb-2">Nova Visita</h3>
-        <p>Clique aqui para registrar uma nova visita. No formulário você precisará:</p>
+        <h3 className="font-bold text-lg mb-2">Formulário de Visita</h3>
+        <p>Preencha os dados da visita:</p>
         <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
-          <li>Selecionar o cliente cadastrado</li>
-          <li>Escolher o supervisor (ou preencher manualmente)</li>
-          <li>Selecionar o checklist criado</li>
-          <li>Preencher os dados operacionais (setor, turno, colaborador)</li>
-          <li>Preencher cada local do checklist</li>
+          <li><strong>Cliente:</strong> Selecione o cliente cadastrado</li>
+          <li><strong>Supervisor:</strong> Escolha da lista ou preencha manualmente</li>
+          <li><strong>Checklist:</strong> Selecione o template criado</li>
+          <li><strong>Data:</strong> Data da visita</li>
+          <li><strong>Setor, Turno, Colaborador:</strong> Informações operacionais</li>
+          <li><strong>Preenchimento:</strong> Preencha cada local do checklist</li>
         </ul>
         <p className="text-sm text-gray-600 mt-2">💡 Dica: Após preencher todos os campos, a visita será salva automaticamente.</p>
       </div>
     ),
-    placement: 'bottom',
+    placement: 'left',
   },
   
   // ========== DASHBOARD ==========

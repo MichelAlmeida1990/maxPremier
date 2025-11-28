@@ -192,44 +192,6 @@ export default function AppTour({ run = false, onComplete }: AppTourProps) {
           backgroundColor: '#ffffff',
           overlayColor: 'rgba(0, 0, 0, 0.5)',
           arrowColor: '#ffffff',
-          zIndex: 10000,
-        },
-        tooltip: {
-          borderRadius: 8,
-          padding: 20,
-        },
-        buttonNext: {
-          backgroundColor: '#00afee',
-          color: '#ffffff',
-          borderRadius: 6,
-          padding: '10px 20px',
-          fontSize: 14,
-          fontWeight: 600,
-        },
-        buttonBack: {
-          color: '#031f5f',
-          marginRight: 10,
-          fontSize: 14,
-        },
-        buttonSkip: {
-          color: '#666',
-          fontSize: 14,
-        },
-      }}
-      locale={{
-        back: 'Voltar',
-        close: 'Fechar',
-        last: 'Finalizar',
-        next: 'Próximo',
-        skip: 'Pular',
-      }}
-      styles={{
-        options: {
-          primaryColor: '#00afee', // maxpremier-blue-bright
-          textColor: '#031f5f', // maxpremier-blue-dark
-          backgroundColor: '#ffffff',
-          overlayColor: 'rgba(0, 0, 0, 0.5)',
-          arrowColor: '#ffffff',
         },
         tooltip: {
           borderRadius: 8,
